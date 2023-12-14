@@ -1,4 +1,4 @@
-# AeroFuil
+# AeroFoil
 
 Repositori ini digunakan sebagai pengumpulan data latih sekaligus pelatihan model
 dengan *Convolutional Neural Network* (CNN).
