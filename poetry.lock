@@ -925,6 +925,42 @@ files = [
 ]
 
 [[package]]
+name = "polars"
+version = "0.20.0"
+description = "Blazingly fast DataFrame library"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "polars-0.20.0-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:813707e28bdbdf00a849a72d856cad48a4063a1e7f4487bc7068f957988107ce"},
+    {file = "polars-0.20.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:7504c63e9783de6cec289f89383b797a5e1fd72c10abc137bba7ee022d34f193"},
+    {file = "polars-0.20.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e01beb3e3ad2c3efff209fafd5eff785489d1a6fb196aee2e29237d969389255"},
+    {file = "polars-0.20.0-cp38-abi3-manylinux_2_24_aarch64.whl", hash = "sha256:1d78313386fb46ab516eebb521c8612a9acb86c9972af195e771f468c0e5e77d"},
+    {file = "polars-0.20.0-cp38-abi3-win_amd64.whl", hash = "sha256:8b8856c7368b605b77e9cf231340ab39a4af86a1dafddde92a2b913c0c47007e"},
+    {file = "polars-0.20.0.tar.gz", hash = "sha256:cc70f7e4f195b438de54f51d411fa831d032d8528fc01fea186c8784f06d0f04"},
+]
+
+[package.extras]
+adbc = ["adbc_driver_sqlite"]
+all = ["polars[adbc,cloudpickle,connectorx,deltalake,fsspec,gevent,matplotlib,numpy,pandas,pyarrow,pydantic,pyiceberg,sqlalchemy,timezone,xlsx2csv,xlsxwriter]"]
+cloudpickle = ["cloudpickle"]
+connectorx = ["connectorx (>=0.3.2)"]
+deltalake = ["deltalake (>=0.14.0)"]
+fsspec = ["fsspec"]
+gevent = ["gevent"]
+matplotlib = ["matplotlib"]
+numpy = ["numpy (>=1.16.0)"]
+openpyxl = ["openpyxl (>=3.0.0)"]
+pandas = ["pandas", "pyarrow (>=7.0.0)"]
+pyarrow = ["pyarrow (>=7.0.0)"]
+pydantic = ["pydantic"]
+pyiceberg = ["pyiceberg (>=0.5.0)"]
+pyxlsb = ["pyxlsb (>=1.0)"]
+sqlalchemy = ["pandas", "sqlalchemy"]
+timezone = ["backports.zoneinfo", "tzdata"]
+xlsx2csv = ["xlsx2csv (>=0.8.0)"]
+xlsxwriter = ["xlsxwriter"]
+
+[[package]]
 name = "promise"
 version = "2.3"
 description = "Promises/A+ implementation for Python"
@@ -1611,4 +1647,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "edec8a660ea2a78adb07d155dc49660fcd44f27f139fef376742148e4e3d1a9b"
+content-hash = "aaaa08773063273e4c86c8fb601c3820073047953fd257ed446340ca42b6c131"
