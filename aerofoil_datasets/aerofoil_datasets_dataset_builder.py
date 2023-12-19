@@ -7,10 +7,11 @@ import tensorflow_datasets as tfds
 class Builder(tfds.core.GeneratorBasedBuilder):
     """DatasetBuilder for aerofoil_datasets dataset."""
 
-    VERSION = tfds.core.Version("1.1.0")
+    VERSION = tfds.core.Version("1.1.1")
     RELEASE_NOTES = {
         "1.0.0": "Koleksi data latih perdana.",
-        "1.0.0": "Pemisahan data train dan test.",
+        "1.1.0": "Pemisahan data train dan test.",
+        "1.1.1": "Koreksi nama pemisahan dataset.",
     }
 
     def _info(self) -> tfds.core.DatasetInfo:
@@ -34,7 +35,7 @@ class Builder(tfds.core.GeneratorBasedBuilder):
 
         return {
             "train": self._generate_examples("train"),
-            "test": self._generate_examples("test"),
+            "valid": self._generate_examples("valid"),
         }
 
     def _generate_examples(self, name):
@@ -42,7 +43,7 @@ class Builder(tfds.core.GeneratorBasedBuilder):
 
         if name == "train":
             df = df.sample(fraction=0.8, shuffle=True, seed=2024)
-        elif name == "test":
+        elif name == "valid":
             df = df.sample(fraction=0.2, shuffle=True, seed=2024)
         else:
             df = df.sample(fraction=0.1, shuffle=True, seed=2024)
