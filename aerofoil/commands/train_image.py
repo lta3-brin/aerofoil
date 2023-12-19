@@ -1,7 +1,10 @@
 import os
 import typer
+import tensorflow as tf
 from typing import Annotated
 import tensorflow_datasets as tfds
+
+from aerofoil.helpers.image import normalize_img
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
@@ -36,3 +39,12 @@ def trainimg(
 
     if imgshowtest:
         tfds.show_examples(dstest, info, is_batched=True)
+
+    dstrain = dstrain.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
+    dstrain = dstrain.cache()
+    dstrain = dstrain.shuffle(info.splits["train"].num_examples)
+    dstrain = dstrain.prefetch(tf.data.AUTOTUNE)
+
+    dstest = dstest.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
+    dstest = dstest.cache()
+    dstest = dstest.prefetch(tf.data.AUTOTUNE)
