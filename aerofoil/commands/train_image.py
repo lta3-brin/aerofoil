@@ -18,18 +18,9 @@ def trainimg(
         bool, typer.Option(help="Tampilkan gambar sampel train?")
     ] = False,
 ):
-    dstrain, infotrain = tfds.load(
+    (dstrain, dstest), info = tfds.load(
         "aerofoil_datasets",
-        split="train",
-        batch_size=batchsize,
-        with_info=True,
-        as_supervised=True,
-        shuffle_files=True,
-    )
-
-    dstest, infotest = tfds.load(
-        "aerofoil_datasets",
-        split="test",
+        split=["train", "test"],
         batch_size=batchsize,
         with_info=True,
         as_supervised=True,
@@ -41,7 +32,7 @@ def trainimg(
         print(f"Jumlah datasets (Test) = {len(dstest)}")
 
     if imgshowtrain:
-        tfds.show_examples(dstrain, infotrain, is_batched=True)
+        tfds.show_examples(dstrain, info, is_batched=True)
 
     if imgshowtest:
-        tfds.show_examples(dstest, infotest, is_batched=True)
+        tfds.show_examples(dstest, info, is_batched=True)
