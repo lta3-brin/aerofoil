@@ -2,17 +2,20 @@ import typer
 import tensorflow as tf
 from typing import Annotated
 import tensorflow_datasets as tfds
+from matplotlib import pyplot as plt
 
 from aerofoil.helpers.image import normalize_img
 from aerofoil.helpers.conv3 import Aerofoil3BN2FC
 
 
 def trainimg(
-    epoch: Annotated[int, typer.Argument(help="Total pelatihan yang dilakukan.")] = 100,
+    epoch: Annotated[int, typer.Argument(
+        help="Total pelatihan yang dilakukan.")] = 100,
     batchsize: Annotated[
         int, typer.Option(help="Jumlah grup dalam kumpulan dataset.")
     ] = 128,
-    showcount: Annotated[bool, typer.Option(help="Tampilkan jumlah dataset?")] = False,
+    showcount: Annotated[bool, typer.Option(
+        help="Tampilkan jumlah dataset?")] = False,
     imgshowtrain: Annotated[
         bool, typer.Option(help="Tampilkan gambar sampel untuk latihan?")
     ] = False,
@@ -20,9 +23,12 @@ def trainimg(
         bool, typer.Option(help="Tampilkan gambar sampel untuk validasi?")
     ] = False,
     lr: Annotated[
-        float, typer.Option(help="Learning rate yang dipilih untuk Adam optimizer.")
+        float, typer.Option(
+            help="Learning rate yang dipilih untuk Adam optimizer.")
     ] = 10e-4,
 ):
+    tf.config.experimental.enable_op_determinism()
+    tf.random.set_seed(2024)
     (dstrain, dsvalid), info = tfds.load(
         "aerofoil_datasets",
         split=["train", "valid"],
@@ -61,4 +67,30 @@ def trainimg(
         metrics=tf.keras.metrics.R2Score(name="r2"),
     )
 
-    model.fit(dstrain, epochs=epoch, validation_data=dsvalid)
+    history = model.fit(dstrain, epochs=epoch, validation_data=dsvalid)
+
+    plt.figure()
+
+    # summarize history for accuracy
+    plt.subplot(211)
+    plt.plot(history.history["r2"])
+    plt.plot(history.history["val_r2"])
+    plt.title("model r^2")
+    plt.ylabel(r"r^2")
+    plt.xlabel("epoch")
+    plt.legend(["train", "test"], loc="lower right")
+    plt.grid()
+
+    # summarize history for loss
+    plt.subplot(212)
+    plt.plot(history.history["loss"])
+    plt.plot(history.history["val_loss"])
+    plt.title("model loss")
+    plt.ylabel("MSE")
+    plt.xlabel("epoch")
+    plt.yscale("log")
+    plt.legend(["train", "validation"], loc="upper right")
+    plt.grid()
+
+    plt.tight_layout()
+    plt.show()
