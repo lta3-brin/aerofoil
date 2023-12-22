@@ -7,11 +7,12 @@ import tensorflow_datasets as tfds
 class Builder(tfds.core.GeneratorBasedBuilder):
     """DatasetBuilder for aerofoil_datasets dataset."""
 
-    VERSION = tfds.core.Version("1.1.1")
+    VERSION = tfds.core.Version("2.0.0")
     RELEASE_NOTES = {
         "1.0.0": "Koleksi data latih perdana.",
         "1.1.0": "Pemisahan data train dan test.",
         "1.1.1": "Koreksi nama pemisahan dataset.",
+        "2.0.0": "Penambahan citra binary dan sdf.",
     }
 
     def _info(self) -> tfds.core.DatasetInfo:
@@ -19,7 +20,7 @@ class Builder(tfds.core.GeneratorBasedBuilder):
         return self.dataset_info_from_configs(
             features=tfds.features.FeaturesDict(
                 {
-                    "image": tfds.features.Image(shape=(78, 78, 3)),
+                    "image": tfds.features.Image(shape=(128, 128, 3)),
                     "label": tfds.features.Tensor(shape=(3,), dtype=tf.float64),
                 }
             ),
@@ -34,12 +35,19 @@ class Builder(tfds.core.GeneratorBasedBuilder):
         """Returns SplitGenerators."""
 
         return {
-            "train": self._generate_examples("train"),
-            "valid": self._generate_examples("valid"),
+            "trainsdf": self._generate_examples("train", "sdf"),
+            "validsdf": self._generate_examples("valid", "sdf"),
+            "trainbin": self._generate_examples("train", "bin"),
+            "validbin": self._generate_examples("valid", "bin"),
         }
 
-    def _generate_examples(self, name):
-        df = pl.read_csv("./out.csv")
+    def _generate_examples(self, name, mode):
+        if mode == "sdf":
+            fname = "./sdf.csv"
+        else:
+            fname = "./bin.csv"
+
+        df = pl.read_csv(fname)
 
         if name == "train":
             df = df.sample(fraction=0.8, shuffle=True, seed=2024)
