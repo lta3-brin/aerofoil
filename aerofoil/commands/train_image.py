@@ -2,20 +2,19 @@ import typer
 import tensorflow as tf
 from typing import Annotated
 import tensorflow_datasets as tfds
-from matplotlib import pyplot as plt
 
 from aerofoil.helpers.image import normalize_img
 from aerofoil.helpers.conv3 import Aerofoil3BN2FC
 
 
 def trainimg(
-    epoch: Annotated[int, typer.Argument(
-        help="Total pelatihan yang dilakukan.")] = 1000,
+    epoch: Annotated[
+        int, typer.Argument(help="Total pelatihan yang dilakukan.")
+    ] = 1000,
     batchsize: Annotated[
         int, typer.Option(help="Jumlah grup dalam kumpulan dataset.")
     ] = 128,
-    show_count: Annotated[bool, typer.Option(
-        help="Tampilkan jumlah dataset?")] = False,
+    show_count: Annotated[bool, typer.Option(help="Tampilkan jumlah dataset?")] = False,
     show_img_train: Annotated[
         bool, typer.Option(help="Tampilkan gambar sampel untuk latihan?")
     ] = False,
@@ -26,8 +25,7 @@ def trainimg(
         bool, typer.Option(help="Tampilkan ringkasan tentang model CNN?")
     ] = False,
     lr: Annotated[
-        float, typer.Option(
-            help="Learning rate yang dipilih untuk Adam optimizer.")
+        float, typer.Option(help="Learning rate yang dipilih untuk Adam optimizer.")
     ] = 10e-4,
 ):
     tf.config.experimental.enable_op_determinism()
@@ -81,10 +79,7 @@ def trainimg(
     )
 
     earlystop = tf.keras.callbacks.EarlyStopping(
-        verbose=1,
-        patience=15,
-        monitor="val_loss",
-        restore_best_weights=True
+        verbose=1, patience=15, monitor="val_loss", restore_best_weights=True
     )
 
     callbacks = [log, checkpoint, earlystop]
