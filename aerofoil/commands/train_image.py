@@ -10,7 +10,7 @@ from aerofoil.helpers.conv3 import Aerofoil3BN2FC
 
 def trainimg(
     epoch: Annotated[int, typer.Argument(
-        help="Total pelatihan yang dilakukan.")] = 100,
+        help="Total pelatihan yang dilakukan.")] = 1000,
     batchsize: Annotated[
         int, typer.Option(help="Jumlah grup dalam kumpulan dataset.")
     ] = 128,
@@ -70,30 +70,27 @@ def trainimg(
         metrics=tf.keras.metrics.R2Score(name="r2"),
     )
 
-    history = model.fit(dstrain, epochs=epoch, validation_data=dsvalid)
+    log = tf.keras.callbacks.TensorBoard(log_dir="./aerofoil_logs")
 
-    plt.figure()
+    checkpoint = tf.keras.callbacks.ModelCheckpoint(
+        verbose=1,
+        mode="min",
+        monitor="val_loss",
+        save_best_only=True,
+        filepath="./aerofoil_checkpoints/",
+    )
 
-    # summarize history for accuracy
-    plt.subplot(211)
-    plt.plot(history.history["r2"])
-    plt.plot(history.history["val_r2"])
-    plt.title("model r^2")
-    plt.ylabel(r"r^2")
-    plt.xlabel("epoch")
-    plt.legend(["train", "test"], loc="lower right")
-    plt.grid()
+    earlystop = tf.keras.callbacks.EarlyStopping(
+        verbose=1,
+        patience=15,
+        monitor="val_loss",
+        restore_best_weights=True
+    )
 
-    # summarize history for loss
-    plt.subplot(212)
-    plt.plot(history.history["loss"])
-    plt.plot(history.history["val_loss"])
-    plt.title("model loss")
-    plt.ylabel("MSE")
-    plt.xlabel("epoch")
-    plt.yscale("log")
-    plt.legend(["train", "validation"], loc="upper right")
-    plt.grid()
-
-    plt.tight_layout()
-    plt.show()
+    callbacks = [log, checkpoint, earlystop]
+    model.fit(
+        dstrain,
+        epochs=epoch,
+        callbacks=callbacks,
+        validation_data=dsvalid,
+    )
