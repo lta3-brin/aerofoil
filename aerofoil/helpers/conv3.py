@@ -28,7 +28,6 @@ class Aerofoil3BN2FC:
                     filters=64,
                     kernel_size=(3, 3),
                     strides=(1, 1),
-                    # padding="same",
                     activation="relu",
                 ),
                 tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
