@@ -161,3 +161,6 @@ cython_debug/
 
 # VSCode
 .vscode/
+
+aerofoil_logs/train/
+aerofoil_logs/validation/
