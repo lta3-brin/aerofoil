@@ -8,9 +8,8 @@ from aerofoil.helpers.conv3 import Aerofoil3BN2FC
 
 
 def trainimg(
-    epoch: Annotated[
-        int, typer.Argument(help="Total pelatihan yang dilakukan.")
-    ] = 1000,
+    jenis: Annotated[str, typer.Argument(help="Jenis citra bin atau sdf.")] = "sdf",
+    epoch: Annotated[int, typer.Option(help="Total pelatihan yang dilakukan.")] = 1000,
     batchsize: Annotated[
         int, typer.Option(help="Jumlah grup dalam kumpulan dataset.")
     ] = 128,
@@ -32,7 +31,7 @@ def trainimg(
     tf.random.set_seed(2024)
     (dstrain, dsvalid), info = tfds.load(
         "aerofoil_datasets",
-        split=["train", "valid"],
+        split=[f"train{jenis}", f"valid{jenis}"],
         batch_size=batchsize,
         with_info=True,
         as_supervised=True,
