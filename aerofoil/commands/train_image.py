@@ -40,7 +40,7 @@ def trainimg(
 
     dstrain = dstrain.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
     dstrain = dstrain.cache()
-    dstrain = dstrain.shuffle(info.splits["train"].num_examples)
+    dstrain = dstrain.shuffle(info.splits[f"train{jenis}"].num_examples)
     dstrain = dstrain.prefetch(tf.data.AUTOTUNE)
 
     dsvalid = dsvalid.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
