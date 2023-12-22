@@ -14,13 +14,16 @@ def trainimg(
     batchsize: Annotated[
         int, typer.Option(help="Jumlah grup dalam kumpulan dataset.")
     ] = 128,
-    showcount: Annotated[bool, typer.Option(
+    show_count: Annotated[bool, typer.Option(
         help="Tampilkan jumlah dataset?")] = False,
-    imgshowtrain: Annotated[
+    show_img_train: Annotated[
         bool, typer.Option(help="Tampilkan gambar sampel untuk latihan?")
     ] = False,
-    imgshowvalid: Annotated[
+    show_img_valid: Annotated[
         bool, typer.Option(help="Tampilkan gambar sampel untuk validasi?")
+    ] = False,
+    show_model_summary: Annotated[
+        bool, typer.Option(help="Tampilkan ringkasan tentang model CNN?")
     ] = False,
     lr: Annotated[
         float, typer.Option(
@@ -47,19 +50,19 @@ def trainimg(
     dsvalid = dsvalid.cache()
     dsvalid = dsvalid.prefetch(tf.data.AUTOTUNE)
 
-    if showcount:
-        print(f"Jumlah datasets (Train) = {len(dstrain)}")
-        print(f"Jumlah datasets (Test) = {len(dsvalid)}")
-
-    if imgshowtrain:
-        tfds.show_examples(dstrain, info, is_batched=True)
-
-    if imgshowvalid:
-        tfds.show_examples(dsvalid, info, is_batched=True)
-
     image_shape = info.features["image"].shape
     arch = Aerofoil3BN2FC(input_shape=image_shape)
     model = arch.get_model()
+
+    if show_count:
+        print(f"Jumlah datasets (Train) = {len(dstrain)}")
+        print(f"Jumlah datasets (Test) = {len(dsvalid)}")
+    if show_img_train:
+        tfds.show_examples(dstrain, info, is_batched=True)
+    if show_img_valid:
+        tfds.show_examples(dsvalid, info, is_batched=True)
+    if show_model_summary:
+        model.summary()
 
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
