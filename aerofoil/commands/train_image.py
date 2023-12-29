@@ -67,14 +67,14 @@ def trainimg(
         metrics=tf.keras.metrics.R2Score(name="r2"),
     )
 
-    log = tf.keras.callbacks.TensorBoard(log_dir="./aerofoil_logs")
+    log = tf.keras.callbacks.TensorBoard(log_dir=f"./aerofoil_logs/log{jenis}")
 
     checkpoint = tf.keras.callbacks.ModelCheckpoint(
         verbose=1,
         mode="min",
         monitor="val_loss",
         save_best_only=True,
-        filepath="./aerofoil_checkpoints/",
+        filepath=f"./aerofoil_checkpoints/model{jenis}",
     )
 
     earlystop = tf.keras.callbacks.EarlyStopping(
