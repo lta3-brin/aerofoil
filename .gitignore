@@ -163,7 +163,5 @@ cython_debug/
 .vscode/
 
 # Customs
-aerofoil_logs/train/
-aerofoil_logs/validation/
-aerofoil_checkpoints/
-!aerofoil_checkpoints/.gitkeep
+aerofoil_logs/log*
+aerofoil_checkpoints/model*
