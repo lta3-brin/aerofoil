@@ -3,12 +3,12 @@ import polars as pl
 from PIL import Image
 from glob import glob
 import tensorflow as tf
-from typer import Option
+from typer import Argument
 from typing import Annotated
 
 
 def predictimg(
-    jenis: Annotated[str, Option(help="Jenis citra bin atau sdf.")] = "bin",
+    jenis: Annotated[str, Argument(help="Jenis citra bin atau sdf.")] = "bin",
 ):
     foil = []
     images = []
